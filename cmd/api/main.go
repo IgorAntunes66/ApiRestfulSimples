@@ -18,11 +18,14 @@ func main() {
 	}
 
 	repo := repository.NewRepository(db)
-	apiServer := handler.NewApiServer(*repo)
+	apiServer := handler.NewApiServer(repo)
 
 	r := chi.NewRouter()
 	r.Get("/", handler.HelloHandler)
 	r.Get("/tasks", apiServer.TasksListHandler)
 	r.Get("/tasks/{ID}", apiServer.TaskHandler)
+	r.Post("/tasks", apiServer.CreateTaskHandler)
+	r.Put("/tasks/{ID}", apiServer.UpdateTaskHandler)
+	r.Delete("/tasks/{ID}", apiServer.DeleteTaskHandler)
 	http.ListenAndServe(":8080", r)
 }
