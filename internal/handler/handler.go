@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -62,6 +63,7 @@ func (s *ApiServer) CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(tarefa)
+	go sucessCreateTask(newID)
 }
 
 func (s *ApiServer) UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
@@ -101,4 +103,36 @@ func (s *ApiServer) DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func sucessCreateTask(newID int) {
+	log.Printf("INFO: Tarefa %d criada com sucesso em segundo plano.", newID)
+}
+
+func checkDB(done chan bool) {
+	time.Sleep(1 * time.Second)
+	done <- true
+}
+
+func checkES(done chan bool) {
+	time.Sleep(2 * time.Second)
+	done <- true
+}
+
+func CheckHealthHandler(w http.ResponseWriter, r *http.Request) {
+	channelServices := make(chan bool)
+	go checkDB(channelServices)
+	go checkES(channelServices)
+
+	for i := 0; i < 2; i++ {
+		select {
+		case <-channelServices:
+			continue
+		case <-time.After(3 * time.Second):
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

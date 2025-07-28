@@ -27,5 +27,6 @@ func main() {
 	r.Post("/tasks", apiServer.CreateTaskHandler)
 	r.Put("/tasks/{ID}", apiServer.UpdateTaskHandler)
 	r.Delete("/tasks/{ID}", apiServer.DeleteTaskHandler)
+	r.Get("/health", handler.CheckHealthHandler)
 	http.ListenAndServe(":8080", r)
 }
