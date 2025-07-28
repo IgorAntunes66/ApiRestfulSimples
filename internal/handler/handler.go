@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -133,6 +134,24 @@ func CheckHealthHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
 	w.WriteHeader(http.StatusOK)
+}
+
+func somaCounter(counter *int, wg *sync.WaitGroup, mu *sync.Mutex) {
+	mu.Lock()
+	*counter++
+	mu.Unlock()
+	wg.Done()
+}
+
+func RaceHandler(w http.ResponseWriter, r *http.Request) {
+	var mutex sync.Mutex
+	var wg sync.WaitGroup
+	var counter int
+	wg.Add(1000)
+	for i := 0; i < 1000; i++ {
+		go somaCounter(&counter, &wg, &mutex)
+	}
+	wg.Wait()
+	fmt.Println(counter)
 }
