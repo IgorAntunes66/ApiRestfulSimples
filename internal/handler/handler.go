@@ -2,8 +2,8 @@ package handler
 
 import (
 	"apiRestFulSimpes/internal/model"
-	"apiRestFulSimpes/internal/repository"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/jackc/pgx/v5"
 )
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
@@ -82,8 +83,8 @@ func (s *ApiServer) UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = s.repo.UpdateTask(idInt, tarefa)
-	if err == repository.ErrRegistroNaoEncontrado {
-		http.Error(w, repository.ErrRegistroNaoEncontrado.Error(), http.StatusNotFound)
+	if errors.Is(err, pgx.ErrNoRows) {
+		http.Error(w, "Erro: registro não encontrado", http.StatusNotFound)
 	} else if err != nil {
 		http.Error(w, "Erro ao atualizar a tarefa no banco de dados", http.StatusBadRequest)
 	}
@@ -99,8 +100,8 @@ func (s *ApiServer) DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = s.repo.DeleteTask(idInt)
-	if err == repository.ErrRegistroNaoEncontrado {
-		http.Error(w, repository.ErrRegistroNaoEncontrado.Error(), http.StatusNotFound)
+	if errors.Is(err, pgx.ErrNoRows) {
+		http.Error(w, "Erro: Registro inexistente", http.StatusNotFound)
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusNoContent)
