@@ -32,17 +32,16 @@ Clone o repositório:
     cd ApiRestfulSimples
 
 Inicie os containers:
-O docker-compose.yml irá configurar e iniciar o container da aplicação e o container do banco de dados PostgreSQL.
-Bash
 
-docker-compose up -d
+O docker-compose.yml irá configurar e iniciar o container da aplicação e o container do banco de dados PostgreSQL.
+
+    docker-compose up -d
 
 A aplicação estará disponível em http://localhost:8080.
 
 Pare os containers:
-Para parar e remover os containers, redes e volumes, execute:
-Bash
 
+Para parar e remover os containers, redes e volumes, execute:
     docker-compose down
 
 Endpoints da API
@@ -98,13 +97,12 @@ Criar uma nova tarefa
     Descrição: Cria uma nova tarefa.
 
     Exemplo de Corpo da Requisição:
-    JSON
 
-{
-    "Title": "Fazer café",
-    "Description": "Usar o pó novo.",
-    "Done": false
-}
+      {
+          "Title": "Fazer café",
+          "Description": "Usar o pó novo.",
+          "Done": false
+      }
 
 Exemplo de Resposta: 201 Created
 JSON
@@ -123,7 +121,6 @@ Atualizar uma tarefa
     Descrição: Atualiza uma tarefa existente.
 
     Exemplo de Corpo da Requisição:
-    JSON
 
     {
         "Title": "Fazer um bom café",
