@@ -1,5 +1,3 @@
-Com certeza! Com base nos arquivos do projeto, gerei um README.md completo para o seu projeto.
-
 Tasklist API
 
 Descrição
@@ -28,11 +26,10 @@ Pré-requisitos
 
 Passos
 
-    Clone o repositório:
-    Bash
+Clone o repositório:
 
-git clone git@github.com:IgorAntunes66/ApiRestfulSimples.git
-cd ApiRestfulSimples
+    git clone git@github.com:IgorAntunes66/ApiRestfulSimples.git
+    cd ApiRestfulSimples
 
 Inicie os containers:
 O docker-compose.yml irá configurar e iniciar o container da aplicação e o container do banco de dados PostgreSQL.
