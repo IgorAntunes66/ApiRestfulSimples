@@ -42,6 +42,7 @@ A aplicação estará disponível em http://localhost:8080.
 Pare os containers:
 
 Para parar e remover os containers, redes e volumes, execute:
+
     docker-compose down
 
 Endpoints da API
